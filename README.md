@@ -1,159 +1,36 @@
-# Replication: Diagnostic Expectations and Stock Returns (BGLS 2019)
+# Replication
 
-This repository replicates the main empirical results (Tables I--IV, Figures 1--8) of:
+Python replication of all main tables (I–IV) and figures (1–8) from BGLS (2019).
 
-> Bordalo, P., Gennaioli, N., La Porta, R., & Shleifer, A. (2019). **Diagnostic expectations and stock returns.** *Journal of Finance*, 74(6), 2839--2874. [https://doi.org/10.1111/jofi.12833](https://doi.org/10.1111/jofi.12833)
-
-- Overall, all 8 figures and 4 tables are successfully replicated, closely matching published results. Minor differences are attributable to data vintage
-  differences.
-
-## About This Project
-
-This replication was developed collaboratively with **[Claude Code](https://claude.ai/claude-code)** (Anthropic), serving as an experiment in AI-assisted replication of empirical finance research. All Python scripts --- from data downloading to figure generation --- were written through iterative human--AI dialogue, with the original authors' Stata code as the reference implementation.
-
-**Disclaimer**: This repository is intended solely for **academic and educational purposes**. It is an independent replication effort and is not affiliated with or endorsed by the original authors. No proprietary data is distributed; users must obtain their own data access through WRDS and other sources listed below.
-
-## Replicated Results
-
-| Output | Paper Reference | Description |
-|--------|-----------------|-------------|
-| Figure 1, Table I | Section II | Geometric mean returns by LTG decile; descriptive statistics |
-| Figure 2 | Section II | Evolution of EPS around portfolio formation |
-| Figure 3 | Section II | Evolution of analyst LTG forecasts around formation |
-| Figure 4 | Section II | Forecast errors: realized EPS growth minus LTG |
-| Figure 5 | Section III | Earnings announcement returns by LTG decile |
-| Table II | Section III | LTG forecast revisions and errors |
-| Figures 7--8 | Section IV | Kernel densities of realized vs. expected EPS growth |
-| Figure 6 | Section V | Simulated diagnostic expectations model moments |
-| Table III | Section V | SMM parameter estimates for the diagnostic Kalman filter |
-| Table IV | Section VI | Double sorts on LTG and earnings persistence/volatility |
-
-## Project Structure
+## Directory Structure
 
 ```
-BGLS2019_rep/
-├── README.md                  This file
-└── replication/
-    ├── code/                  12 Python scripts (see below)
-    │   ├── 00_download_data.py
-    │   ├── build_compustat_eps.py
-    │   ├── 11_figure1_table1.py
-    │   ├── 12_figure2.py
-    │   ├── 12_figure3.py
-    │   ├── 12_figure4.py
-    │   ├── 13_figure5.py
-    │   ├── 13_table2.py
-    │   ├── 14_figures7_8.py
-    │   ├── 15_figure6.py
-    │   ├── 15_table3.py
-    │   └── 16_table4.py
-    ├── data/ -> ../../data/   Symlink to raw data directory
-    ├── output/                Generated figures (.png), tables (.txt), intermediate datasets (.parquet)
-    └── original/              Authors' original Stata and Python code (JF replication package)
+replication/
+├── code/           Python scripts that produce each figure and table
+├── output/         Generated outputs (figures, tables, intermediate datasets)
+└── original/       Authors' original Stata and Python code (from JF replication package)
 ```
 
-## Data Requirements
+## Execution Order
 
-All data must be obtained independently by users with appropriate access. **No data files are included in this repository.**
+1. **Data download**: Run `code/00_download_data.py` to download CRSP and COMPUSTAT data from WRDS into `../../data/`. IBES data and Fama-French factors must be uploaded manually (see `../../data/README.md`).
+2. **Prerequisite**: Run `code/build_compustat_eps.py` to construct the COMPUSTAT-based per-share EPS panel (`output/compustat_eps_panel.parquet`).
+3. **Independent scripts**: All numbered scripts (`11_*` through `16_*`) can be run independently after the prerequisite.
 
-### Downloaded via script (`00_download_data.py`)
+### Pre-built intermediate datasets (no build scripts)
 
-Requires a [WRDS](https://wrds-www.wharton.upenn.edu/) account.
+The following datasets in `output/` were built interactively and do not yet have standalone build scripts. They are required by most numbered scripts:
 
-| Source | Dataset | Description |
-|--------|---------|-------------|
-| COMPUSTAT | `funda` | Annual fundamentals |
-| COMPUSTAT | `fundq` | Quarterly fundamentals |
-| CRSP | Monthly stock file | Returns, prices, shares outstanding |
-| CRSP | `cfacshr` | Cumulative factor to adjust shares |
-| CRSP | `stocknames` | PERMNO--ticker mapping |
-| CCM | Linking table | CRSP--COMPUSTAT link |
-
-### Manually obtained
-
-| File | Source | Description |
-|------|--------|-------------|
-| `EPS_unadj_act.dta`, `EPS_unadj_forecast.dta` | IBES via WRDS | Unadjusted actual and forecast EPS |
-| `iclink_updated.dta` | WRDS | IBES--CRSP identifier link |
-| `FF_5_month.csv` | Kenneth French's website | Monthly Fama-French 5 factors |
-| `daily_FF3.csv` | Kenneth French's website | Daily Fama-French 3 factors |
-| `daily_ret.parquet` | CRSP via WRDS | Daily stock returns |
-| `comp_rdq.parquet` | COMPUSTAT via WRDS | Report dates of quarterly earnings |
-
-## How to Run
-
-### 1. Set up environment
-
-```bash
-pip install pandas numpy scipy statsmodels wrds matplotlib
-```
-
-### 2. Download data
-
-```bash
-# Set WRDS credentials
-export PGPASSWORD='your_wrds_password'
-
-# Download CRSP and COMPUSTAT from WRDS
-python replication/code/00_download_data.py
-
-# Manually place IBES and other files in data/ (see table above)
-```
-
-### 3. Build intermediate datasets
-
-Six intermediate datasets (`descriptive.parquet`, `crsp_monthly_filtered.parquet`, `portfolio_returns.parquet`, `portfolio_assignments.parquet`, `ltg_all_months.parquet`, `daily_ret_filtered.parquet`) are required by most scripts but do not yet have standalone build scripts. These were constructed interactively during the replication process. See `replication/README.md` for details.
-
-```bash
-# Build COMPUSTAT EPS panel (automated)
-python replication/code/build_compustat_eps.py
-```
-
-### 4. Generate figures and tables
-
-Each numbered script can be run independently:
-
-```bash
-python replication/code/11_figure1_table1.py   # Figure 1, Table I
-python replication/code/12_figure2.py           # Figure 2
-python replication/code/12_figure3.py           # Figure 3
-python replication/code/12_figure4.py           # Figure 4
-python replication/code/13_figure5.py           # Figure 5
-python replication/code/13_table2.py            # Table II
-python replication/code/14_figures7_8.py        # Figures 7-8
-python replication/code/15_figure6.py           # Figure 6
-python replication/code/15_table3.py            # Table III (slow: SMM grid search)
-python replication/code/16_table4.py            # Table IV
-```
-
-Outputs are written to `replication/output/`.
+- **`descriptive.parquet`** — Core firm-year panel (87,758 obs): IBES LTG deciles, COMPUSTAT EPS leads/lags, CRSP returns, merged via CCM+iclink
+- **`crsp_monthly_filtered.parquet`** — Monthly returns filtered to sample firms (~3M obs)
+- **`portfolio_returns.parquet`** — Equal-weighted and value-weighted monthly returns by LTG decile
+- **`portfolio_assignments.parquet`** — Annual LTG decile assignments
+- **`ltg_all_months.parquet`** — Monthly LTG forecasts at all available dates
+- **`daily_ret_filtered.parquet`** — Daily returns filtered to sample firms (for Figure 5)
 
 ## Methodology Notes
 
-- **EPS measure**: COMPUSTAT income before extraordinary items (`ib`) per share, split-adjusted via CRSP `cfacshr`, matching `earnings.do` from the original code.
-- **LTG timing (Table II)**: Analyst forecasts selected 30--90 days after annual earnings announcements, following `revisions03.do`.
-- **Rolling AR(1) (Table IV)**: 20-quarter rolling regressions with calendar-quarter alignment (`qofd(date)`) and duplicate averaging within (PERMNO, quarter), matching `Table04_A.do`. Missing values filled by Fama-French 48 industry-year medians.
-- **SMM (Table III)**: Diagnostic expectations formula with grid search over $(a, b, \sigma_f, \sigma_e, \theta, s)$.
-- **Kernel densities (Figures 7--8)**: Epanechnikov kernel with absolute bandwidth $h = 0.15$, matching Stata's `kdensity` defaults in `Kernels_JF.do`.
-- **Cohort design (Figure 4)**: 3-year non-overlapping cohorts for forecast error computation, matching `JFsubmission.do`.
-
-## Citation
-
-If you use or reference this replication code, please cite the original paper:
-
-```bibtex
-@article{BGLS2019,
-  title     = {Diagnostic Expectations and Stock Returns},
-  author    = {Bordalo, Pedro and Gennaioli, Nicola and La Porta, Rafael and Shleifer, Andrei},
-  journal   = {Journal of Finance},
-  volume    = {74},
-  number    = {6},
-  pages     = {2839--2874},
-  year      = {2019},
-  doi       = {10.1111/jofi.12833}
-}
-```
-
-## License
-
-This replication code is provided for academic and educational use only. The original paper, data, and authors' replication code remain the intellectual property of their respective owners.
+- **Table II** uses analyst LTG forecasts made 30–90 days after annual earnings announcements (following `revisions03.do`), with forecast errors computed from COMPUSTAT `ib` per share.
+- **Table III** estimates the diagnostic expectations model via Simulated Method of Moments (SMM), searching over parameters $(a, b, \sigma_f, \sigma_e, \theta, s)$.
+- **Table IV** computes rolling 20-quarter AR(1) regressions for earnings persistence and volatility, with missing values filled by Fama-French 48 industry-year medians.
+- **Figure 4** uses 3-year non-overlapping cohorts for forecast error computation, matching `JFsubmission.do`.

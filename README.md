@@ -4,6 +4,8 @@ This repository replicates the main empirical results (Tables I--IV, Figures 1--
 
 > Bordalo, P., Gennaioli, N., La Porta, R., & Shleifer, A. (2019). **Diagnostic expectations and stock returns.** *Journal of Finance*, 74(6), 2839--2874. [https://doi.org/10.1111/jofi.12833](https://doi.org/10.1111/jofi.12833)
 
+- Overall, all figures and results are successfully reproduced. Any minor discrepancies are likely attributable to differences in data processing procedures and data versions.
+
 ## About This Project
 
 This replication was developed collaboratively with **[Claude Code](https://claude.ai/claude-code)** (Anthropic), serving as an experiment in AI-assisted replication of empirical finance research. All Python scripts --- from data downloading to figure generation --- were written through iterative human--AI dialogue, with the original authors' Stata code as the reference implementation.

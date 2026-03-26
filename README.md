@@ -1,6 +1,6 @@
 # Replication
 
-Python replication of all main tables (I–IV) and figures (1–8) from BGLS (2019).
+Replication of Bordalo, Gennaioli, La Porta, and Shleifer (2019, Journal of Finance) using Claude Code. An experiment in AI-assisted replication of empirical finance research. All Python code was developed collaboratively with Claude Code (Anthropic). This repository is for academic and educational purposes only.
 
 ## Directory Structure
 

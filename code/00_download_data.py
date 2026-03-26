@@ -29,7 +29,7 @@ import time
 DATA_DIR = '/workspaces/Dividend-growth/data'
 os.makedirs(DATA_DIR, exist_ok=True)
 
-WRDS_USER = 'wangxs19980920'
+WRDS_USER = ''
 
 t0 = time.time()
 print("Connecting to WRDS...")

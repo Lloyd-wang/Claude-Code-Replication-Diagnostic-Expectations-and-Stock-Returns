@@ -1,0 +1,31 @@
+=====================================================================================
+Table IV: Double Sorts on LTG and Earnings Persistence / Volatility
+BGLS (2019) Replication
+=====================================================================================
+
+Annual log returns (EW portfolios).
+Persistence: 1981-2015. Volatility: 1981-2012.
+
+                     Persistence of                  Volatility of        
+                     Growth in EPS             Prediction Error of Growth in EPS 
+              ---------- ---------- ----------    ---------- ---------- ----------
+                  Bottom       Top   t-Stats        Bottom       Top   t-Stats
+                     30%       30%   Top-Bot           30%       30%   Top-Bot
+              ---------- ---------- ----------    ---------- ---------- ----------
+          LLTG     14.4%     15.1%      0.20         12.2%     13.8%      0.35
+          HLTG      5.0%      3.9%     -0.74         13.3%      0.5%     -2.07
+     HLTG-LLTG     -9.5%    -11.3%     -1.75          0.6%    -13.7%     -2.51
+              ---------- ---------- ----------    ---------- ---------- ----------
+
+Notes:
+  Sorting: industry-year average persistence/volatility (FF48 x year).
+  Persistence = AR(1) slope from rolling 20-quarter regression of LTM log EPS growth.
+  Volatility = std dev of AR(1) prediction errors over rolling 20 quarters.
+  EPS = niq/cshprq from COMPUSTAT quarterly, split-adjusted by cfacshr.
+  Returns: EW monthly gross returns -> log -> sum to annual.
+  t-stats = mean(Top-Bottom spread) / semean.
+=====================================================================================
+
+Paper values for comparison:
+  Persistence: LLTG(15.0%, 12.8%, -0.73) HLTG(7.8%, 0.9%, -2.46) HLTG-LLTG(-7.2%, -11.5%, -2.05)
+  Volatility:  LLTG(14.9%, 17.3%, 0.80) HLTG(4.9%, 0.6%, -1.82) HLTG-LLTG(-9.8%, -16.6%, -2.42)

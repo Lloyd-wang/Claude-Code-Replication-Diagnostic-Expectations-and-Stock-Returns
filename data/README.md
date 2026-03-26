@@ -25,7 +25,6 @@ These files were obtained separately (IBES requires special WRDS access; FF fact
 | `EPS_unadj_act.dta` | IBES `actu` | Actual earnings and announcement dates (`ANNDATS`) |
 | `iclink_updated.dta` | WRDS | IBES-CRSP identifier link (`TICKER`-`PERMNO`) |
 | `daily_ret.parquet` | CRSP `dsf` | Daily stock returns (83M rows) for event studies |
-| `comp_rdq.parquet` | COMPUSTAT `fundq` | Report dates of quarterly earnings (`rdq`) |
 | `FF_5_month.csv` | Kenneth French | Fama-French five-factor monthly returns |
 | `daily_FF3.csv` | Kenneth French | Fama-French three-factor daily returns |
 

@@ -20,13 +20,12 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from pathlib import Path
-
-OUT = Path(__file__).resolve().parent.parent / "output"
+OUT_DIR = 'BGLS2019_rep/replication/output'
+DATA_DIR = 'data'
 
 # ── Load data ────────────────────────────────────────────────────────────────
-port = pd.read_parquet(OUT / "portfolio_returns.parquet")
-desc = pd.read_parquet(OUT / "descriptive.parquet")
+port = pd.read_parquet(f"{OUT_DIR}/portfolio_returns.parquet")
+desc = pd.read_parquet(f"{OUT_DIR}/descriptive.parquet")
 
 # Filter to 1981-2015
 port = port[(port["yr"] >= 1981) & (port["yr"] <= 2015)].copy()
@@ -93,16 +92,15 @@ ax.text(
 )
 
 plt.tight_layout()
-fig.savefig(OUT / "Figure1.png", dpi=150)
+fig.savefig(f"{OUT_DIR}/Figure1.png", dpi=150)
 plt.close(fig)
-print(f"Saved {OUT / 'Figure1.png'}")
+print(f"Saved {OUT_DIR}/Figure1.png")
 
 # ── Table I (matching the paper) ─────────────────────────────────────────────
 
 # --- Merge Compustat annual data via CCM link ---
-DATA = Path(__file__).resolve().parent.parent / "data"
-comp = pd.read_parquet(DATA / "comp_annual.parquet")
-ccm = pd.read_parquet(DATA / "ccm_link.parquet")
+comp = pd.read_parquet(f"{DATA_DIR}/comp_annual.parquet")
+ccm = pd.read_parquet(f"{DATA_DIR}/ccm_link.parquet")
 
 # Keep primary links only
 ccm = ccm[ccm["linktype"].isin(["LC", "LU"])].copy()
@@ -186,7 +184,7 @@ df = pd.concat(size_deciles, ignore_index=True)
 # 5. Years publicly traded: (STATPERS - begdat) in years, where begdat is
 #    the first CRSP listing date (min st_date per permno from crsp_stocknames).
 _crsp_names = pd.read_parquet(
-    Path(__file__).resolve().parent.parent / "data" / "crsp_stocknames.parquet",
+    f"{DATA_DIR}/crsp_stocknames.parquet",
     columns=["permno", "st_date"],
 )
 _crsp_names["st_date"] = pd.to_datetime(_crsp_names["st_date"])
@@ -285,9 +283,9 @@ lines.append(sep)
 
 table_txt = "\n".join(lines) + "\n"
 
-with open(OUT / "Table1.txt", "w") as f:
+with open(f"{OUT_DIR}/Table1.txt", "w") as f:
     f.write(table_txt)
 
-print(f"Saved {OUT / 'Table1.txt'}")
+print(f"Saved {OUT_DIR}/Table1.txt")
 print()
 print(table_txt)

@@ -13,14 +13,15 @@ import matplotlib.pyplot as plt
 import pyarrow.parquet as pq
 import gc
 
-OUT_DIR = '/workspaces/Dividend-growth/BGLS2019_rep/replication/output'
-DATA_DIR = '/workspaces/Dividend-growth/data'
+OUT_DIR = 'BGLS2019_rep/replication/output'
+DATA_DIR = 'data'
 
 # ══════════════════════════════════════════════════
 # Step 1: Load rdq dates and link to PERMNO
 # ══════════════════════════════════════════════════
-print("Loading rdq and CCM link...")
-rdq = pd.read_parquet(f'{DATA_DIR}/comp_rdq.parquet')
+print("Loading rdq from comp_quarterly and CCM link...")
+rdq = pd.read_parquet(f'{DATA_DIR}/comp_quarterly.parquet', columns=['gvkey', 'datadate', 'rdq'])
+rdq = rdq.dropna(subset=['rdq'])
 rdq['rdq'] = pd.to_datetime(rdq['rdq'])
 
 ccm = pd.read_parquet(f'{DATA_DIR}/ccm_link.parquet')

@@ -14,7 +14,7 @@ Data NOT downloaded here (already local):
   EPS_unadj_act.dta, EPS_unadj_forecast.dta  — IBES
   iclink_updated.dta                          — IBES-CRSP link
   FF_5_month.csv, daily_FF3.csv               — Fama-French factors
-  comp_rdq.parquet                            — COMPUSTAT RDQ dates (pre-downloaded)
+  (comp_rdq.parquet is no longer needed — rdq is included in comp_quarterly.parquet)
 
 WRDS credentials: set PGPASSWORD env var or enter interactively.
 Sample period: 1970-2018 (covers original paper's 1981-2015 with lookback).
@@ -26,10 +26,10 @@ import os
 import gc
 import time
 
-DATA_DIR = '/workspaces/Dividend-growth/data'
+DATA_DIR = 'data'
 os.makedirs(DATA_DIR, exist_ok=True)
 
-WRDS_USER = ''
+WRDS_USER = os.environ.get('WRDS_USER', 'your_wrds_username')
 
 t0 = time.time()
 print("Connecting to WRDS...")
